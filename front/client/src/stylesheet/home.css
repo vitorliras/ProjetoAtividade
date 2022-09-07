@@ -1,0 +1,21 @@
+.cardsmile {
+   border-color: #48a81b;
+}
+.cardsmile .prioridade {
+    color: #48a81b;
+    font-weight: bold;
+}
+.cardmeh{
+    border-color: #ff9b26;
+}
+.cardmeh .prioridade {
+    color: #ff9b26;
+    font-weight: bold;
+}
+.cardfrown{
+    border-color: #f1184c;
+}
+.cardfrown .prioridade {
+    color: #f1184c;
+    font-weight: bold;
+}
