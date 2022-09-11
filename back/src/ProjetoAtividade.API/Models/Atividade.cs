@@ -10,7 +10,7 @@ namespace ProjetoAtividade.API.Models
         public int id { get; set; }
         public string titulo { get; set; }
         public string descricao { get; set; }
-        public string prioridade { get; set; }
+        public Prioridade prioridade { get; set; }
 
         public Atividade(){
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProjetoAtividade.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoAtividade.API
 {
@@ -26,8 +29,13 @@ namespace ProjetoAtividade.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services.AddDbContext<DataContext>(
+                options => options.UseSqlite(Configuration.GetConnectionString("Default"))
+            );
+            services.AddControllers()
+                .AddJsonOptions(x=>{
+                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjetoAtividade.API", Version = "v1" });

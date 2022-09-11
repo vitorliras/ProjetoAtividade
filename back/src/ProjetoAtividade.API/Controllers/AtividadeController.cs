@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjetoAtividade.API.Models;
+using ProjetoAtividade.API.Data;
 
 namespace ProjetoAtividade.API.Controllers
 {
@@ -11,36 +12,54 @@ namespace ProjetoAtividade.API.Controllers
     [Route("api/[controller]")]
     public class AtividadeController : ControllerBase
     {
-        public IEnumerable<Atividade> atividades =  new List<Atividade>(){
-            new Atividade(1),
-            new Atividade(2),
-            new Atividade(3)
-        };
+        private readonly DataContext _context;
+
+        public AtividadeController(DataContext context)
+        {
+            _context = context;
+        }       
 
         [HttpGet]
         public IEnumerable<Atividade> Get(){
-            return atividades;
+            return _context.atividades;
         }
 
         [HttpGet("{id}")]
         public Atividade Get(int id){
-            return atividades.FirstOrDefault(x => x.id == id);
+            return _context.atividades.FirstOrDefault(x => x.id == id);
         }
 
         [HttpPost]
         public IEnumerable<Atividade> post(Atividade atv){
-            return atividades.Append<Atividade>(atv);
+
+            _context.atividades.Add(atv);
+            if(_context.SaveChanges() > 0)
+                return _context.atividades;
+            else
+                throw new Exception("Não foi possivel salvar o cadastro");
         }
 
         [HttpPut("{id}")]
         public Atividade Put(int id, Atividade atv){
-            atv.id=atv.id+1;
-           return atv;
+            if(atv.id != id)
+                throw new Exception("Arividade atualizada errada");
+           _context.Update(atv);
+
+           if(_context.SaveChanges() > 0)
+                return _context.atividades.FirstOrDefault(x => x.id == id);
+            else
+                return new Atividade();
         }
 
         [HttpDelete("{id}")]
-        public string Delete(int id){
-            return $"back DELETE {id}";
+        public bool Delete(int id){
+            var atividade = _context.atividades.FirstOrDefault(x => x.id == id);
+            if(atividade == null)
+                throw new Exception("deletando uma atividade que não existe");
+
+            _context.Remove(atividade);
+
+            return _context.SaveChanges() > 0;
         }
     }
 }
