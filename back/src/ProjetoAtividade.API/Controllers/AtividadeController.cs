@@ -30,11 +30,11 @@ namespace ProjetoAtividade.API.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<Atividade> post(Atividade atv){
+        public Atividade post(Atividade atv){
 
             _context.atividades.Add(atv);
             if(_context.SaveChanges() > 0)
-                return _context.atividades;
+                return atv;
             else
                 throw new Exception("Não foi possivel salvar o cadastro");
         }

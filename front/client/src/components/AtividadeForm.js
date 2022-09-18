@@ -52,7 +52,6 @@ function AtividadeForm(props) {
 
     return (
         <>
-            <h1>{ atividade.id !== 0 ? atividade.titulo : 'Atividades'}</h1>
             <form className='row g-3' onSubmit={handleSubmit}>
                 {/* <div className='col-md-6'>
                 <label className='form-label'>id</label>
